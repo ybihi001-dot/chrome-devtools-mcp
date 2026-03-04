@@ -486,12 +486,12 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 -- Produits exemples
-INSERT INTO products (merchant_id, name, category, price_mad, stock, stock_alert, image_url, is_flash_sale, flash_price, sku)
+INSERT INTO products (id, merchant_id, name, category, price_mad, stock, stock_alert, image_url, is_flash_sale, flash_price, sku)
 VALUES
-  ('11111111-0000-0000-0000-000000000001','Babouches Cuir Homme','mode',199.00,20,3,'https://via.placeholder.com/400x400?text=Babouches',FALSE,NULL,'BBO-001'),
-  ('11111111-0000-0000-0000-000000000001','Thé à la menthe (250g)','deco',45.00,100,10,'https://via.placeholder.com/400x400?text=The',FALSE,NULL,'THE-250'),
-  ('22222222-0000-0000-0000-000000000002','Tapis Kilim 120x180','deco',899.00,5,2,'https://via.placeholder.com/400x400?text=TapisKilim',FALSE,NULL,'TK-120'),
-  ('33333333-0000-0000-0000-000000000003','Powerbank 10000mAh','tech',299.00,30,5,'https://via.placeholder.com/400x400?text=Powerbank',TRUE,249.00,'PB-10000')
+  ('60000000-0000-0000-0000-000000000001','11111111-0000-0000-0000-000000000001','Babouches Cuir Homme','mode',199.00,20,3,'https://via.placeholder.com/400x400?text=Babouches',FALSE,NULL,'BBO-001'),
+  ('60000000-0000-0000-0000-000000000002','11111111-0000-0000-0000-000000000001','Thé à la menthe (250g)','deco',45.00,100,10,'https://via.placeholder.com/400x400?text=The',FALSE,NULL,'THE-250'),
+  ('60000000-0000-0000-0000-000000000003','22222222-0000-0000-0000-000000000002','Tapis Kilim 120x180','deco',899.00,5,2,'https://via.placeholder.com/400x400?text=TapisKilim',FALSE,NULL,'TK-120'),
+  ('60000000-0000-0000-0000-000000000004','33333333-0000-0000-0000-000000000003','Powerbank 10000mAh','tech',299.00,30,5,'https://via.placeholder.com/400x400?text=Powerbank',TRUE,249.00,'PB-10000')
 ON CONFLICT DO NOTHING;
 
 -- Customers demo
@@ -505,19 +505,19 @@ ON CONFLICT DO NOTHING;
 INSERT INTO orders (id, merchant_id, customer_id, items, total_mad, status, payment_method)
 VALUES (
   '41111111-0000-0000-0000-000000000001', '11111111-0000-0000-0000-000000000001', '51111111-0000-0000-0000-000000000001',
-  '[{"product_id":"11111111-0000-0000-0000-000000000001","name":"Babouches Cuir Homme","price_mad":199.00,"qty":2}]'::jsonb,
+  '[{"product_id":"60000000-0000-0000-0000-000000000001","name":"Babouches Cuir Homme","price_mad":199.00,"qty":2}]'::jsonb,
   398.00, 'paid', 'cash'
 )
 ON CONFLICT DO NOTHING;
 
 -- order_items correspondant
 INSERT INTO order_items (order_id, product_id, name, price_mad, qty)
-VALUES ('41111111-0000-0000-0000-000000000001','11111111-0000-0000-0000-000000000001','Babouches Cuir Homme',199.00,2)
+VALUES ('41111111-0000-0000-0000-000000000001','60000000-0000-0000-0000-000000000001','Babouches Cuir Homme',199.00,2)
 ON CONFLICT DO NOTHING;
 
 -- Exemple d'avis
 INSERT INTO reviews (product_id, buyer_id, rating, comment)
-VALUES ('11111111-0000-0000-0000-000000000001','51111111-0000-0000-0000-000000000001',5,'Excellent produit, très confortable')
+VALUES ('60000000-0000-0000-0000-000000000001','51111111-0000-0000-0000-000000000001',5,'Excellent produit, très confortable')
 ON CONFLICT DO NOTHING;
 
 -- Coupon demo
@@ -527,7 +527,7 @@ ON CONFLICT DO NOTHING;
 
 -- Favorites demo
 INSERT INTO favorites (merchant_id, customer_id, product_id)
-VALUES ('11111111-0000-0000-0000-000000000001','51111111-0000-0000-0000-000000000001','11111111-0000-0000-0000-000000000001')
+VALUES ('11111111-0000-0000-0000-000000000001','51111111-0000-0000-0000-000000000001','60000000-0000-0000-0000-000000000001')
 ON CONFLICT DO NOTHING;
 
 -- ============================================================
