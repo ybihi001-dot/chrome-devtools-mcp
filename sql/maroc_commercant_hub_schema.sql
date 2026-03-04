@@ -239,61 +239,61 @@ ALTER TABLE merchant_analytics    ENABLE ROW LEVEL SECURITY;
 
 -- merchants table : le commerçant peut gérer sa propre row, admin peut tout
 CREATE POLICY merchants_own_row ON merchants
-  USING (id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (id::uuid = auth.uid()::text OR is_admin());
+  USING (id = auth.uid() OR is_admin())
+  WITH CHECK (id = auth.uid() OR is_admin());
 
 -- products : merchant owner or admin
 CREATE POLICY products_owner ON products
-  USING (merchant_id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (merchant_id::uuid = auth.uid()::text OR is_admin());
+  USING (merchant_id = auth.uid() OR is_admin())
+  WITH CHECK (merchant_id = auth.uid() OR is_admin());
 
 -- customers : merchant owner or admin
 CREATE POLICY customers_owner ON customers
-  USING (merchant_id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (merchant_id::uuid = auth.uid()::text OR is_admin());
+  USING (merchant_id = auth.uid() OR is_admin())
+  WITH CHECK (merchant_id = auth.uid() OR is_admin());
 
 -- orders : merchant owner OR customer who owns the order OR admin
 CREATE POLICY orders_merchant_or_customer ON orders
-  USING (merchant_id::uuid = auth.uid()::text OR customer_id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (merchant_id::uuid = auth.uid()::text OR customer_id::uuid = auth.uid()::text OR is_admin());
+  USING (merchant_id = auth.uid() OR customer_id = auth.uid() OR is_admin())
+  WITH CHECK (merchant_id = auth.uid() OR customer_id = auth.uid() OR is_admin());
 
 -- order_items : accessible via order ownership
 CREATE POLICY order_items_via_order ON order_items
-  USING (EXISTS (SELECT 1 FROM orders o WHERE o.id = order_items.order_id AND (o.merchant_id::uuid = auth.uid()::text OR o.customer_id::uuid = auth.uid()::text OR is_admin())))
-  WITH CHECK (EXISTS (SELECT 1 FROM orders o WHERE o.id = order_items.order_id AND (o.merchant_id::uuid = auth.uid()::text OR o.customer_id::uuid = auth.uid()::text OR is_admin())));
+  USING (EXISTS (SELECT 1 FROM orders o WHERE o.id = order_items.order_id AND (o.merchant_id = auth.uid() OR o.customer_id = auth.uid() OR is_admin())))
+  WITH CHECK (EXISTS (SELECT 1 FROM orders o WHERE o.id = order_items.order_id AND (o.merchant_id = auth.uid() OR o.customer_id = auth.uid() OR is_admin())));
 
 -- reviews : public readable, but create only by customers and merchants for their products; admin peut gérer
 CREATE POLICY reviews_read ON reviews
   FOR SELECT USING (TRUE);
 
 CREATE POLICY reviews_manage ON reviews
-  FOR ALL USING (buyer_id::uuid = auth.uid()::text OR EXISTS (SELECT 1 FROM products p WHERE p.id = reviews.product_id AND p.merchant_id::uuid = auth.uid()::text) OR is_admin())
-  WITH CHECK (buyer_id::uuid = auth.uid()::text OR EXISTS (SELECT 1 FROM products p WHERE p.id = reviews.product_id AND p.merchant_id::uuid = auth.uid()::text) OR is_admin());
+  FOR ALL USING (buyer_id = auth.uid() OR EXISTS (SELECT 1 FROM products p WHERE p.id = reviews.product_id AND p.merchant_id = auth.uid()) OR is_admin())
+  WITH CHECK (buyer_id = auth.uid() OR EXISTS (SELECT 1 FROM products p WHERE p.id = reviews.product_id AND p.merchant_id = auth.uid()) OR is_admin());
 
 -- messages : merchant OR customer OR admin
 CREATE POLICY messages_conversation ON messages
-  USING (merchant_id::uuid = auth.uid()::text OR customer_id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (merchant_id::uuid = auth.uid()::text OR customer_id::uuid = auth.uid()::text OR is_admin());
+  USING (merchant_id = auth.uid() OR customer_id = auth.uid() OR is_admin())
+  WITH CHECK (merchant_id = auth.uid() OR customer_id = auth.uid() OR is_admin());
 
 -- notifications : owner or admin
 CREATE POLICY notifications_owner ON notifications
-  USING (merchant_id::uuid = auth.uid()::text OR customer_id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (merchant_id::uuid = auth.uid()::text OR customer_id::uuid = auth.uid()::text OR is_admin());
+  USING (merchant_id = auth.uid() OR customer_id = auth.uid() OR is_admin())
+  WITH CHECK (merchant_id = auth.uid() OR customer_id = auth.uid() OR is_admin());
 
 -- coupons : merchant owner or admin
 CREATE POLICY coupons_owner ON coupons
-  USING (merchant_id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (merchant_id::uuid = auth.uid()::text OR is_admin());
+  USING (merchant_id = auth.uid() OR is_admin())
+  WITH CHECK (merchant_id = auth.uid() OR is_admin());
 
 -- favorites : merchant/customer owner or admin
 CREATE POLICY favorites_owner ON favorites
-  USING (merchant_id::uuid = auth.uid()::text OR customer_id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (merchant_id::uuid = auth.uid()::text OR customer_id::uuid = auth.uid()::text OR is_admin());
+  USING (merchant_id = auth.uid() OR customer_id = auth.uid() OR is_admin())
+  WITH CHECK (merchant_id = auth.uid() OR customer_id = auth.uid() OR is_admin());
 
 -- merchant_analytics : merchant owner or admin
 CREATE POLICY analytics_owner ON merchant_analytics
-  USING (merchant_id::uuid = auth.uid()::text OR is_admin())
-  WITH CHECK (merchant_id::uuid = auth.uid()::text OR is_admin());
+  USING (merchant_id = auth.uid() OR is_admin())
+  WITH CHECK (merchant_id = auth.uid() OR is_admin());
 
 -- ============================================================
 -- TRIGGERS : mise à jour automatique updated_at (appliquée aux tables avec updated_at)
